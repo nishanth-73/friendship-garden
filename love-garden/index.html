@@ -71,21 +71,31 @@
     top: calc(20px + var(--safe-top));
     left: 50%;
     transform: translateX(-50%);
-    width: 100%;
-    max-width: 94vw;
+    width: auto;
+    max-width: min(92vw, 520px);
     text-align: center;
-    color: rgba(255, 255, 255, 0.4);
+    color: #ffb3c6;
+    background: rgba(255,107,138,0.16);
+    border: 1px solid rgba(255,107,138,0.30);
     pointer-events: none;
-    letter-spacing: 2px;
+    letter-spacing: 1.2px;
     font-style: italic;
-    z-index: 10;
+    z-index: 20;
     opacity: 1;
-    font-size: clamp(10px, 2.8vw, 14px);
+    font-size: clamp(12px, 2.8vw, 14px);
     line-height: 1.4;
-    padding: 0 clamp(12px, 4vw, 20px);
+    padding: 7px 16px;
     overflow-wrap: break-word;
     word-break: break-word;
+    border-radius: 22px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 20px rgba(255,107,138,0.18);
+    animation: tapPulse 1.6s ease-in-out infinite;
+    white-space: nowrap;
   }
+  #ui.tap-hidden { opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; transition: opacity 0.6s ease, visibility 0.6s ease; animation: none !important; }
+  @keyframes tapPulse { 0%,100% { opacity: 1; transform: translateX(-50%) scale(1); } 50% { opacity: 0.55; transform: translateX(-50%) scale(0.96); } }
   #ui.hint-fade { animation: fadeOut 4s forwards; }
   @keyframes fadeOut {
     to { opacity: 0; }
@@ -109,25 +119,18 @@
     line-height: 1.3;
   }
   
-  /* Theme Selector */
+  /* Theme Selector — REMOVED per mobile fix (must not be visible or cover timer) */
   #themeSelector {
-    position: absolute;
-    bottom: calc(30px + var(--safe-bottom));
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 30;
-    display: flex;
-    gap: clamp(6px, 1.8vw, 12px);
-    background: rgba(0, 0, 0, 0.5);
-    padding: clamp(8px, 2.5vw, 12px) clamp(12px, 3.5vw, 20px);
-    border-radius: 30px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-width: min(94vw, 420px);
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+    bottom: -9999px !important;
+    left: -9999px !important;
   }
   #themeSelector button {
     width: 32px;
@@ -164,29 +167,30 @@
     border-color: white;
   }
 
-  /* Anniversary Timer */
+  /* Anniversary Timer — must stay fully visible, never behind picker */
   #timer {
     position: absolute;
-    bottom: calc(100px + var(--safe-bottom));
+    bottom: calc(84px + var(--safe-bottom));
     left: 50%;
     transform: translateX(-50%);
-    z-index: 15;
-    color: rgba(255, 255, 255, 0.3);
-    font-size: clamp(10px, 2.6vw, 13px);
-    letter-spacing: 1.2px;
+    z-index: 18;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: clamp(11px, 2.6vw, 13px);
+    letter-spacing: 0.9px;
     text-align: center;
     font-family: 'Georgia', serif;
-    background: rgba(0, 0, 0, 0.3);
-    padding: clamp(6px, 1.8vw, 8px) clamp(12px, 3vw, 20px);
+    background: rgba(0, 0, 0, 0.42);
+    padding: clamp(7px, 1.8vw, 9px) clamp(14px, 3.2vw, 20px);
     border-radius: 20px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.09);
     white-space: nowrap;
     max-width: 94vw;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.4;
+    pointer-events: none;
   }
   #timer span {
     color: rgba(255, 200, 150, 0.7);
@@ -722,34 +726,47 @@
     .gallery-grid { gap: clamp(14px, 3vw, 22px); }
     .timeline-wrap { max-width: 92vw; }
     .letter-paper { max-height: 56vh; max-height: 56dvh; }
-    #timer { bottom: calc(88px + var(--safe-bottom)); font-size: clamp(9px, 2.4vw, 12px); max-width: 96vw; }
-    #themeSelector { bottom: calc(14px + var(--safe-bottom)); }
+    #timer { bottom: calc(84px + var(--safe-bottom)); font-size: clamp(11px, 2.3vw, 12px); max-width: 96vw; }
+    #themeSelector { display: none !important; }
   }
 
   /* ---- Large Mobile 480px and below (covers 412px, 414px) ---- */
   @media (max-width: 480px) {
     body { cursor: auto; }
     #ui {
-      top: calc(12px + var(--safe-top));
-      font-size: clamp(9px, 2.6vw, 12px);
-      letter-spacing: 1px;
-      padding: 0 12px;
-      max-width: 96vw;
+      top: calc(10px + var(--safe-top));
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: clamp(11px, 3vw, 12px);
+      letter-spacing: 0.9px;
+      padding: 7px 14px;
+      max-width: 92vw;
+      white-space: nowrap;
+      background: rgba(255,107,138,0.16);
+      border: 1px solid rgba(255,107,138,0.30);
+      color: #ffb3c6;
+      border-radius: 22px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      box-shadow: 0 4px 16px rgba(255,107,138,0.18);
+      animation: tapPulse 1.6s ease-in-out infinite;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     #heartCounter {
-      top: calc(44px + var(--safe-top));
-      left: calc(12px + var(--safe-left));
+      top: calc(54px + var(--safe-top));
+      left: calc(10px + var(--safe-left));
       font-size: 11px;
-      padding: 4px 8px;
-      max-width: 44vw;
+      padding: 5px 10px;
+      max-width: 42vw;
     }
     #musicBtn {
-      top: calc(44px + var(--safe-top));
-      right: calc(12px + var(--safe-right));
-      padding: 7px 12px;
+      top: calc(54px + var(--safe-top));
+      right: calc(10px + var(--safe-right));
+      padding: 6px 11px;
       font-size: 11px;
-      min-height: 40px;
-      max-width: 44vw;
+      min-height: 38px;
+      max-width: 42vw;
     }
     #photoWatermark {
       font-size: clamp(14px, 5vw, 22px);
@@ -759,34 +776,32 @@
       opacity: 0.12;
     }
     #timer {
-      bottom: calc(82px + var(--safe-bottom));
+      bottom: calc(76px + var(--safe-bottom));
       left: 50%;
       transform: translateX(-50%);
       width: auto;
       max-width: 94vw;
-      white-space: normal;
+      white-space: nowrap;
       line-height: 1.35;
-      padding: 7px 14px;
-      font-size: 10.5px;
-      letter-spacing: 0.8px;
+      padding: 8px 14px;
+      font-size: 11px;
+      letter-spacing: 0.7px;
       text-align: center;
       overflow-wrap: break-word;
       word-break: break-word;
+      color: rgba(255,255,255,0.92);
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.09);
     }
-    #timer span { font-size: 11px; display: inline; }
+    #timer span { font-size: 11px; display: inline; color: #ffccd5; }
     #themeSelector {
-      bottom: calc(12px + var(--safe-bottom));
-      gap: 8px;
-      padding: 8px 12px;
-      border-radius: 24px;
-      max-width: 96vw;
-      justify-content: center;
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
     }
     #themeSelector button {
-      width: 36px;
-      height: 36px;
-      min-width: 36px;
-      min-height: 36px;
+      display: none !important;
     }
     #introTypewriter { font-size: clamp(17px, 5.2vw, 24px); width: min(94vw, 640px); }
     #introSkip { bottom: calc(18px + var(--safe-bottom)); right: calc(14px + var(--safe-right)); padding: 7px 14px; font-size: 11px; }
@@ -839,30 +854,35 @@
   @media (max-width: 412px) {
     .polaroid { width: 42.5vw; max-width: 42.5vw; }
     .gallery-grid { gap: 14px; }
-    #timer { font-size: 10px; padding: 6px 12px; bottom: calc(80px + var(--safe-bottom)); }
+    #timer { font-size: 10.5px; padding: 7px 12px; bottom: calc(74px + var(--safe-bottom)); max-width: 95vw; }
     .letter-paper { width: 95vw; }
+    #themeSelector { display: none !important; }
   }
 
   /* ---- iPhone 390px (12/13/14) ---- */
   @media (max-width: 390px) {
     .polaroid { width: 42vw; }
-    #themeSelector button { width: 34px; height: 34px; min-width: 34px; min-height: 34px; }
-    #themeSelector { gap: 7px; padding: 7px 10px; }
+    #themeSelector { display: none !important; }
+    #themeSelector button { display: none !important; }
     .chapter-heading { font-size: clamp(19px, 6vw, 26px); }
     .letter-paper { font-size: clamp(15.5px, 4.6vw, 18px); }
+    #timer { font-size: 10.5px; bottom: calc(74px + var(--safe-bottom)); }
+    #ui { font-size: 11.5px; top: calc(10px + var(--safe-top)); }
+    #heartCounter, #musicBtn { top: calc(52px + var(--safe-top)); }
   }
 
   /* ---- Small Mobile 375px (iPhone SE, 8, X) ---- */
   @media (max-width: 375px) {
-    #ui { font-size: 9.5px; letter-spacing: 0.8px; }
-    #heartCounter { font-size: 10.5px; max-width: 46vw; }
-    #musicBtn { font-size: 10.5px; }
+    #ui { font-size: 11px; letter-spacing: 0.8px; top: calc(10px + var(--safe-top)); padding: 6px 12px; }
+    #heartCounter { font-size: 10.5px; max-width: 42vw; top: calc(50px + var(--safe-top)); }
+    #musicBtn { font-size: 10.5px; max-width: 42vw; top: calc(50px + var(--safe-top)); }
     .polaroid { width: 44vw; max-width: 44vw; padding: 9px 9px 36px; }
     .polaroid-photo { aspect-ratio: 1/1; }
     .polaroid-caption { font-size: 13px; }
     .gallery-grid { gap: 12px; }
-    #timer { font-size: 9.5px; max-width: 96vw; line-height: 1.3; }
-    #themeSelector button { width: 33px; height: 33px; min-width: 33px; min-height: 33px; }
+    #timer { font-size: 10.5px; max-width: 96vw; line-height: 1.3; bottom: calc(72px + var(--safe-bottom)); padding: 7px 12px; }
+    #themeSelector { display: none !important; }
+    #themeSelector button { display: none !important; }
     .lock-card { padding: 24px 18px 22px; }
     .lock-title { font-size: clamp(18px, 5.2vw, 22px); }
     #introTypewriter { font-size: clamp(16px, 5vw, 22px); }
@@ -876,32 +896,36 @@
   @media (max-width: 360px) {
     .polaroid { width: 44vw; }
     .gallery-grid { gap: 10px; }
-    #timer { bottom: calc(78px + var(--safe-bottom)); padding: 6px 10px; }
-    #themeSelector { padding: 6px 10px; gap: 6px; }
-    #themeSelector button { width: 32px; height: 32px; min-width: 32px; min-height: 32px; }
+    #timer { bottom: calc(72px + var(--safe-bottom)); padding: 7px 10px; font-size: 10.5px; }
+    #themeSelector { display: none !important; }
+    #themeSelector button { display: none !important; }
     .chapter-heading { font-size: 19px; }
     .letter-paper { font-size: 14.5px; }
     #sceneNav { gap: 8px; padding: 6px 4px; }
+    #ui { font-size: 10.5px; top: calc(9px + var(--safe-top)); padding: 6px 11px; }
+    #heartCounter { top: calc(48px + var(--safe-top)); font-size: 10px; max-width: 41vw; }
+    #musicBtn { top: calc(48px + var(--safe-top)); font-size: 10px; max-width: 41vw; }
   }
 
   /* ---- Ultra Small 320px (iPhone 5/SE 1st gen, small Android) ---- */
   @media (max-width: 320px) {
-    #ui { font-size: 9px; top: calc(10px + var(--safe-top)); }
-    #heartCounter { top: calc(38px + var(--safe-top)); left: calc(8px + var(--safe-left)); font-size: 10px; padding: 3px 7px; }
-    #musicBtn { top: calc(38px + var(--safe-top)); right: calc(8px + var(--safe-right)); font-size: 10px; padding: 6px 10px; min-height: 38px; }
+    #ui { font-size: 10px; top: calc(8px + var(--safe-top)); padding: 6px 10px; max-width: 92vw; letter-spacing: 0.6px; }
+    #heartCounter { top: calc(46px + var(--safe-top)); left: calc(6px + var(--safe-left)); font-size: 9.5px; padding: 4px 7px; max-width: 41vw; }
+    #musicBtn { top: calc(46px + var(--safe-top)); right: calc(6px + var(--safe-right)); font-size: 9.5px; padding: 5px 8px; min-height: 36px; max-width: 41vw; }
     .polaroid { width: 42vw; max-width: 42vw; padding: 8px 8px 34px; }
     .polaroid-caption { font-size: 12.5px; bottom: 7px; }
     .gallery-grid { gap: 10px; }
     #timer {
-      bottom: calc(74px + var(--safe-bottom));
-      font-size: 9px;
-      padding: 5px 8px;
+      bottom: calc(70px + var(--safe-bottom));
+      font-size: 10px;
+      padding: 6px 9px;
       letter-spacing: 0.5px;
       max-width: 98vw;
+      white-space: nowrap;
     }
-    #timer span { font-size: 9.5px; }
-    #themeSelector { bottom: calc(8px + var(--safe-bottom)); gap: 5px; padding: 6px 8px; }
-    #themeSelector button { width: 30px; height: 30px; min-width: 30px; min-height: 30px; }
+    #timer span { font-size: 10px; }
+    #themeSelector { display: none !important; }
+    #themeSelector button { display: none !important; }
     .lock-card { width: 96vw; padding: 22px 16px 20px; }
     .lock-title { font-size: 18px; letter-spacing: 1px; }
     .lock-sub { font-size: 11px; }
@@ -924,12 +948,12 @@
 
   /* ---- Landscape Mobile (height 500px and below) ---- */
   @media (orientation: landscape) and (max-height: 500px) {
-    #ui { top: calc(8px + var(--safe-top)); font-size: 10px; }
+    #ui { top: calc(8px + var(--safe-top)); font-size: 10px; padding: 5px 12px; border-radius: 18px; }
     #heartCounter { top: calc(8px + var(--safe-top)); font-size: 10px; }
     #musicBtn { top: calc(8px + var(--safe-top)); padding: 6px 10px; font-size: 10px; min-height: 36px; }
-    #timer { bottom: calc(58px + var(--safe-bottom)); font-size: 10px; padding: 5px 12px; }
-    #themeSelector { bottom: calc(8px + var(--safe-bottom)); padding: 6px 12px; gap: 6px; }
-    #themeSelector button { width: 28px; height: 28px; min-width: 28px; min-height: 28px; }
+    #timer { bottom: calc(68px + var(--safe-bottom)); font-size: 10px; padding: 5px 12px; white-space: nowrap; }
+    #themeSelector { display: none !important; }
+    #themeSelector button { display: none !important; }
     #photoWatermark { display: none; }
     #sceneNav { top: 50%; right: calc(6px + var(--safe-right)); gap: 8px; }
     .lock-card { padding: 18px 20px 16px; max-height: 88dvh; }
@@ -1002,6 +1026,27 @@
   @supports (height: 100dvh) {
     body, #app, .scene { height: 100dvh; }
     canvas { max-height: 100dvh; }
+  }
+
+  /* ---- FINAL MOBILE FIX — timer must wrap, never clip, and stay above continue button ---- */
+  @media (max-width: 480px) {
+    #timer {
+      white-space: normal !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      max-width: 94vw !important;
+      line-height: 1.4 !important;
+      overflow-wrap: break-word !important;
+      word-break: break-word !important;
+      text-align: center !important;
+      padding: 8px 12px !important;
+    }
+  }
+  @media (max-width: 360px) {
+    #timer { font-size: 10px !important; padding: 7px 10px !important; }
+  }
+  @media (max-width: 320px) {
+    #timer { font-size: 10px !important; padding: 6px 8px !important; letter-spacing: 0.4px !important; max-width: 96vw !important; }
   }
 </style>
 </head>
@@ -1259,8 +1304,11 @@ function goToScene(name) {
 
   if (name === 'garden') {
     const hint = document.getElementById('ui');
-    if (hint && !hint.classList.contains('hint-fade')) {
-      setTimeout(() => hint.classList.add('hint-fade'), 3000);
+    if (hint && !hint.dataset.dismissed) {
+      hint.classList.remove('tap-hidden', 'hint-fade');
+      // ensure pulsing visible, not auto-faded
+      hint.style.opacity = '';
+      hint.style.visibility = '';
     }
     if (typeof gardenLoopRunning !== 'undefined' && !gardenLoopRunning && typeof draw === 'function') {
       resize();
@@ -2061,10 +2109,36 @@ const FLOWER_DEFS = {
   generic: { sd: '#1b6522', sl: '#2caa38', leaves: [] }
 };
 
+/* ── TAP HINT — pink pulsing, hide on first tap anywhere ── */
+function dismissTapHint() {
+  const hint = document.getElementById('ui');
+  if (!hint || hint.dataset.dismissed) return;
+  hint.dataset.dismissed = '1';
+  hint.classList.add('tap-hidden');
+  hint.classList.remove('hint-fade');
+}
+
+ // dismiss on any tap/click anywhere once garden is active (not on lock screen)
+let _tapDismissBound = false;
+function bindTapDismiss() {
+  if (_tapDismissBound) return;
+  _tapDismissBound = true;
+  const handler = () => { if (currentScene === 'garden') dismissTapHint(); };
+  window.addEventListener('click', handler, { once: false });
+  window.addEventListener('touchstart', handler, { passive: true });
+  window.addEventListener('keydown', handler);
+}
+// bind after garden becomes active
+const _origGoToScene = goToScene;
+goToScene = function(name) {
+  _origGoToScene(name);
+  if (name === 'garden') bindTapDismiss();
+};
+
 /* ── CLICK HANDLER ────────────────────────── */
 function plantFlower(clientX, clientY) {
   if (currentScene !== 'garden') return; // only plant flowers while in the garden scene
-
+  dismissTapHint();
   // Retry music start if autoplay was blocked earlier
   if (!musicOn) tryPlayMusic();
 
